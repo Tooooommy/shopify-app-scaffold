@@ -1,0 +1,30 @@
+# Railway 配置（Config as Code）
+# 字段说明：https://docs.railway.com/config-as-code/reference
+#
+# ⚠️ 官方已宣布 Config as Code 弃用（deprecated）：现有 railway.toml 仅保留到
+# 2026-12-01，之后须迁移到 Infrastructure as Code，迁移指南见
+# https://docs.railway.com/infrastructure-as-code#migrating-from-config-as-code
+
+[build]
+builder = "NIXPACKS"
+buildCommand = "pnpm run build"
+
+[deploy]
+# pre-deploy 阶段执行数据库迁移：在新实例启动前、旧实例仍在服务的窗口内完成，
+# 迁移失败则中止本次部署，旧版本继续运行（drizzle-kit migrate 幂等，可安全重复执行）。
+# 官方示例为数组形式：preDeployCommand = ["npm run db:migrate"]（可填多条顺序执行）。
+# 注意：不要把迁移放进 startCommand——迁移失败会先打挂新实例再回滚，产生无谓的不健康窗口。
+# 回退方案：若部署时报字段不识别，删除本行并改用
+#   startCommand = "pnpm run db:migrate && pnpm run start"
+preDeployCommand = ["pnpm run db:migrate"]
+startCommand = "pnpm run start"
+# 健康检查端点：app/routes/health.tsx（文档默认超时即 300 秒，此处显式声明）
+healthcheckPath = "/health"
+healthcheckTimeout = 300
+restartPolicyType = "ON_FAILURE"
+restartPolicyMaxRetries = 3
+# ⚠️ 不要给本服务配置 cron_schedule 跑清理任务：官方文档要求 cron 服务执行完即
+# 退出、明确不适用于 web server 这类长驻进程，且上一次未结束会跳过下一次执行
+# （最短 5 分钟、UTC 计时）。见 https://docs.railway.com/cron-jobs
+# 清理任务请拆独立服务，或用外部定时（GitHub Actions / Cloudflare Workers
+# Cron Trigger）发起 POST /cron/cleanup。

@@ -1,0 +1,55 @@
+{
+  "name": "shopify-app-scaffold",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Shopify 内嵌应用脚手架：React Router 7 + Polaris Web Components + Drizzle + S3 预签名直传",
+  "packageManager": "pnpm@12.5.1",
+  "engines": {
+    "node": ">=20.19 <22 || >=22.12"
+  },
+  "scripts": {
+    "dev": "react-router dev",
+    "dev:shopify": "shopify app dev",
+    "build": "react-router build",
+    "start": "react-router-serve ./build/server/index.js",
+    "typecheck": "react-router typegen && tsc --noEmit",
+    "test": "vitest run",
+    "test:coverage": "vitest run --coverage",
+    "db:generate": "drizzle-kit generate",
+    "db:migrate": "drizzle-kit migrate",
+    "db:studio": "drizzle-kit studio",
+    "predeploy": "drizzle-kit migrate"
+  },
+  "dependencies": {
+    "@aws-sdk/client-s3": "^3.1138.0",
+    "@aws-sdk/s3-request-presigner": "^3.1138.0",
+    "@react-router/dev": "^7.18.4",
+    "@react-router/fs-routes": "^7.18.4",
+    "@react-router/node": "^7.18.4",
+    "@react-router/serve": "^7.18.4",
+    "@shopify/admin-api-client": "^2.0.0",
+    "@shopify/app-bridge-react": "^4.2.13",
+    "@shopify/shopify-app-react-router": "^3.0.0",
+    "@shopify/shopify-app-session-storage-drizzle": "^6.0.0",
+    "@shopify/storefront-api-client": "^2.0.0",
+    "drizzle-orm": "^0.45.3",
+    "isbot": "^5.2.0",
+    "postgres": "^3.4.9",
+    "react": "^19.3.0",
+    "react-dom": "^19.3.0",
+    "react-router": "^7.18.4",
+    "zod": "^4.6.5"
+  },
+  "devDependencies": {
+    "@shopify/polaris-types": "^1.1.0",
+    "@types/node": "^25.5.2",
+    "@types/react": "^19.3.0",
+    "@types/react-dom": "^19.3.0",
+    "@vitest/coverage-v8": "^5.0.1",
+    "drizzle-kit": "^0.31.11",
+    "typescript": "^5.9.3",
+    "vite": "^7.3.1",
+    "vitest": "^5.0.1"
+  }
+}

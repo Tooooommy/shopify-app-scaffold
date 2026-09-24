@@ -1,0 +1,31 @@
+# shopify.app.toml —— Shopify App 声明式配置（scope / OAuth / webhook）
+#
+# 修改本文件后需执行 `shopify app deploy`，且商家重新安装应用后才生效。
+
+name = "app-scaffold"
+# TODO: Partners Dashboard → App setup 中的 Client ID（即 SHOPIFY_API_KEY）
+client_id = ""
+# TODO: 替换为 Railway 分配的域名
+application_url = "https://your-app.up.railway.app"
+embedded = true
+
+[access_scopes]
+# 最小权限：脚手架示例不读写 Shopify 业务数据，留空即可；
+# 需要 Admin API 能力时按需追加（如 "read_products"），改后需 deploy + 重装
+scopes = ""
+
+[auth]
+# 与 application_url 同域名；回调路径由 shopify.server.ts 的 authPathPrefix（/auth）决定
+# TODO: 替换为实际域名
+redirect_urls = ["https://your-app.up.railway.app/auth/callback"]
+
+[webhooks]
+api_version = "2026-07"
+
+# 统一 webhook 端点（app/routes/webhooks.tsx → POST /webhooks）：
+# - topics 中的 app/uninstalled：卸载清理
+# - compliance_topics：GDPR 合规（上架必接）
+[[webhooks.subscriptions]]
+topics = ["app/uninstalled"]
+compliance_topics = ["customers/data_request", "customers/redact", "shop/redact"]
+uri = "/webhooks"
