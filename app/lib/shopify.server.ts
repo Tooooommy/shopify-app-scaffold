@@ -29,6 +29,9 @@ const shopify = shopifyApp({
     : {}),
 });
 
-// 对外 interface 只留实际被消费的两项；新需求按需从 shopify 实例解构
+// 对外 interface 只留实际被消费的项；新需求按需从 shopify 实例解构
 export const authenticate = shopify.authenticate;
 export const addDocumentResponseHeaders = shopify.addDocumentResponseHeaders;
+// 登录页专用（app/routes/auth.login.tsx）：库要求登录路径必须调用 shopify.login()，
+// 在登录路径上调用 authenticate.admin 会被库主动拒绝（500，见 validate-shop-and-host-params）
+export const login = shopify.login;
