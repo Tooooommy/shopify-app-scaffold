@@ -4,6 +4,8 @@
 包含 OAuth 安装、Drizzle 会话存储、Webhook（含 GDPR 合规）、S3 预签名直传上传 / 短时效下载示例，
 以及 Railway 部署配置。
 
+> 📖 从零到上线的逐步操作（凭证获取 → 本地启动 → 安装验证 → 部署 → 日常任务 → 故障排查）见 **[USAGE.md](USAGE.md)**。
+
 ## 技术栈
 
 | 层 | 选型 |
@@ -32,6 +34,7 @@ app/
 drizzle/             # Drizzle Kit 生成的 SQL 迁移文件
 tests/               # Vitest：单元测试 + route action 级测试（tests/routes/）
 CONTEXT.md           # 领域词汇表
+USAGE.md             # 使用指南（从零到上线逐步操作）
 public/
 railway.toml         # Railway 部署配置
 shopify.app.toml     # Shopify App 声明式配置（scope / OAuth / webhook）
@@ -172,7 +175,7 @@ Railway 上迁移由 `railway.toml` 的 `preDeployCommand` 在**新实例启动�
   必须在 Partner Dashboard / App Home 中手动启用，否则前端直连 Admin API 会 401。
 - **审核中的 session token 检查**：后端请求必须带 `Authorization: Bearer <session token>`；
   官方适配包在 loader/action 内自动处理，**手写的前端 `fetch` 必须自己携带**
-  （见 `app/lib/file-api-client.ts` 的 `authHeaders`）。
+  （见 `app/lib/file-api-client.ts` 的 `callFileApi`——所有文件接口经它统一注入 `Authorization` 头）。
 
 ## 版本与依赖锁定
 
